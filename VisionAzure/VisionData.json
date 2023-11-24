@@ -1,0 +1,44 @@
+{
+  "tags": [
+    {
+      "name": "室内",
+      "confidence": 0.9663195610046387
+    },
+    {
+      "name": "深红色",
+      "confidence": 0.9046615362167358
+    },
+    {
+      "name": "红",
+      "confidence": 0.8975646495819092
+    },
+    {
+      "name": "墙壁",
+      "confidence": 0.8873282074928284
+    },
+    {
+      "name": "地板",
+      "confidence": 0.6197755336761475
+    },
+    {
+      "name": "雕像",
+      "confidence": 0.5385317206382751
+    }
+  ],
+  "description": {
+    "tags": [ "indoor", "grass", "wearing", "sitting", "small", "hat", "room", "standing", "holding", "stuffed", "brown", "orange", "dressed", "dog", "shoes", "blanket", "bed", "computer", "large", "bear", "living", "playing", "man" ],
+    "captions": [
+      {
+        "text": "a person wearing a costume",
+        "confidence": 0.838291952857416
+      }
+    ]
+  },
+  "requestId": "b5144482-9947-451c-a40a-fa3cdcf445a6",
+  "metadata": {
+    "height": 526,
+    "width": 342,
+    "format": "Jpeg"
+  },
+  "modelVersion": "2021-05-01"
+}

@@ -1,0 +1,60 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+
+
+@{
+    <div class="container">
+                            <div class="form-group">
+                                <label class="form-label">網址</label>
+                                <input class="form-control" id="imgUrl" value="https://web.ntnu.edu.tw/~60132057A/Picture/9KindsOfStudent/3.jpg">
+                            </div>
+                            <div class="form-group">
+                                <img id="imgPrev" src="~/images/no-image-icon-6.png" />
+                            </div>
+                            <div class="form-group">
+                                <button class="btn btn-primary" onclick="imgPreview()">預覽</button>
+                            </div>
+    </div>
+}
+@section Scripts{
+    <script type="text/javascript">
+        const endpoint = "https://msitgroot.cognitiveservices.azure.com";
+        function imgPreview() {
+            // alert("預覽");
+            var imgUrl = $("#imgUrl").val();
+            $("#imgPrev").attr("src", imgUrl);
+
+            var data = {
+                url: imgUrl
+            };
+
+            var params = {
+                // Request parameters
+                "visualFeatures": "Description,Tags,Adult,Brands,Categories,Faces,Objects",
+                // "details": "{string}",
+                "language": "zh",
+                "model-version": "latest"
+            };
+
+            $.ajax({
+                url: `${endpoint}/vision/v3.2/analyze?${$.param(params)}`,
+                beforeSend: function (xhrObj) {
+                    // Request headers
+                    xhrObj.setRequestHeader("Content-Type", "application/json");
+                    xhrObj.setRequestHeader("Ocp-Apim-Subscription-Key", "1d8f622a5a7d4502982cead1aee634c5");
+                },
+                type: "POST",
+                // Request body
+                data: JSON.stringify(data),
+            }).done(function (data) {
+                console.log(JSON.stringify(data));
+                // var text = data['description']['captions'][0]['text'];
+                // var confidence = data['description']['captions'][0]['confidence'];
+                // alert(`說明：${text},信心指數：${(confidence * 100).toFixed(2)}%`);
+            }).fail(function (err) {
+                alert(err.statusText);
+            });
+        };
+    </script>
+}

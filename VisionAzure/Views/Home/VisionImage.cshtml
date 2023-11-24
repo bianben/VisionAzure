@@ -1,0 +1,77 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+
+
+@{
+    <div class="container">
+        <div class="form-group">
+            <label class="form-label">網址</label>
+            <input class="form-control" id="imgFile" type="file" accept="image/*" />
+        </div>
+        <div class="form-group">
+            <img id="imgPrev" src="~/images/no-image-icon-6.png" />
+        </div>
+        <div class="form-group">
+            <button class="btn btn-primary" onclick="imgPreview()">預覽</button>
+        </div>
+    </div>
+}
+@section Scripts{
+    <script type="text/javascript">
+        const endpoint = "https://msitgroot.cognitiveservices.azure.com";
+        var arrayBuffer;
+
+        $('#imgFile').bind("change", function () {
+            // alert("click");
+            var file = this.files[0];
+            var allowType = "image.*";
+            if (file.type.match(allowType)) {
+                var reader = new FileReader();
+                reader.onload = function () {
+                    arrayBuffer = this.result;
+                    var blob = new Blob([arrayBuffer], {
+                        type: "image/jpeg"
+                    });
+                    var urlCreator = window.URL || window.webkitURL;
+                    var imageUrl = urlCreator.createObjectURL(blob);
+                    $("#imgPrev").attr("src", imageUrl);
+                };
+                reader.readAsArrayBuffer(this.files[0]);
+            }
+            else {
+                alert("不支援檔案格式");
+            }
+        });
+
+        function imgPreview() {
+            var params = {
+                // Request parameters
+                "visualFeatures": "Description,Tags",
+                // "details": "{string}",
+                "language": "zh",
+                "model-version": "latest"
+            };
+
+            $.ajax({
+                url: `${endpoint}/vision/v3.2/analyze?${$.param(params)}`,
+                beforeSend: function (xhrObj) {
+                    // Request headers
+                    xhrObj.setRequestHeader("Content-Type", "application/octet-stream");
+                    xhrObj.setRequestHeader("Ocp-Apim-Subscription-Key", "1d8f622a5a7d4502982cead1aee634c5");
+                },
+                type: "POST",
+                // Request body
+                data: arrayBuffer,
+                processData: false,
+            }).done(function (data) {
+                // console.log(JSON.stringify(data));
+                var text = data['description']['captions'][0]['text'];
+                var confidence = data['description']['captions'][0]['confidence'];
+                alert(`說明：${text},信心指數：${(confidence * 100).toFixed(2)}%`);
+            }).fail(function (err) {
+                alert(err.statusText);
+            });
+        };
+    </script>
+}
